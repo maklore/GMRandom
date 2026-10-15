@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"Script1",
+  "%Name":"GMRandom",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Script1",
+  "name":"GMRandom",
   "parent":{
     "name":"GMRandom",
     "path":"GMRandom.yyp",
