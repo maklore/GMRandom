@@ -105,8 +105,7 @@ function GMRandom() {
 	* @param {real} _value Value.
 	*/
 	static get_random = function(_value) {
-		var _frac = frac(__generate());
-		return (_value * _frac);
+		return (_value * __generate());
 	}
 	
 	/**
@@ -115,8 +114,7 @@ function GMRandom() {
 	* @param {real} _value2 Second value.
 	*/	
 	static get_random_range = function(_value1, _value2) {
-		var _frac = frac(__generate());
-		return clamp(_value2 * _frac, _value1, _value2);
+		return clamp(_value2 * __generate(), _value1, _value2);
 	}
 	
 	/**
@@ -124,8 +122,7 @@ function GMRandom() {
 	* @param {real} _value Value.
 	*/
 	static get_irandom = function(_value) {
-		var _frac = frac(__generate());
-		return round(_value * _frac);
+		return round(_value * __generate());
 	}
 	
 	/**
@@ -134,8 +131,7 @@ function GMRandom() {
 	* @param {real} _value2 Second value.
 	*/	
 	static get_irandom_range = function(_value1, _value2) {
-		var _frac = frac(__generate());
-		return clamp(round(_value * _frac), _value1, _value2);
+		return clamp(round(_value * __generate()), _value1, _value2);
 	}
 	
 	/**
@@ -187,7 +183,7 @@ function GMRandom() {
 	    var t = __imul(a ^ a >> 15, 1 | a);
 	    t = t + __imul(t ^ t >> 7, 61 | t) ^ t;
 		var _result = ((t ^ t >> 14) >> 0) / 4294967296;
-	    return _result;
+	    return round(100 * frac(_result)) / 100;
     }
 		
 	return static_get(GMRandom)
