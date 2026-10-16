@@ -188,17 +188,3 @@ function GMRandom() {
 }
 
 GMRandom();
-
-GMRandom.seed_set(80085.1337)
-//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-//GMRandom.seed_restart()
-//show_debug_message("seed restart")
-//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
