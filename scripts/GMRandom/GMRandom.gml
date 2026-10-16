@@ -1,68 +1,140 @@
+/// @desc A seed based pseudo random number generator system.
+/// @returns {struct.GMRandom}
 function GMRandom() {
+
+	static __seed_base = 0;
+	static __iteration_base = -4294967296;
 	
-	//Seed
+	static __data = {
+		seed : __seed_base,
+		seed_previous : __seed_base,
+		seed_saved : __seed_base,
+		seed_saved_previous : __seed_base,
+		iteration : __iteration_base,
+		iteration_previous : __iteration_base,
+		iteration_saved : __iteration_base,
+		iteration_saved_previous : __iteration_base
+	};
+		
+	/**
+	* Sets the seed, and starts the iteration at base if undefined.
+	* @param {real} _seed Seed.
+	* @param {real} [_iteration] Iteration.
+	*/
 	static seed_set = function(_seed, _iteration = undefined) {
-		__seed = _seed;
-		if !is_undefined(__iteration) {
-			__iteration = _iteration;
+		__data.seed = _seed;
+		if !is_undefined(_iteration) {
+			__data.iteration = _iteration;
+		} else {
+			seed_restart();	
 		}
 	}
 	
+	/**
+	* Returns an array with the current seed and iteration.
+	*/	
 	static seed_get = function() {
-		return [__seed, __iteration];
+		return [__data.seed, __data.iteration];
 	}
 	
+	/**
+	* Sets the current seed and iteration to previous seed and iteration.
+	*/
 	static seed_set_previous = function() {
-		__seed = __seed_prev;
-		__iteration = __iteration_prev;
+		__data.seed = __data.seed_previous;
+		__data.iteration = __data.iteration_previous;
 	}
 	
+	/**
+	* Returns the previous seed and iteration.
+	*/	
 	static seed_get_previous = function() {
-		return [__seed_prev, __iteration_prev];
+		return [__data.seed_previous, __data.iteration_previous];
 	}
 	
-	static seed_change = function(_seed) {
-		__seed_prev = __seed;
-		__iteration_prev = __iteration;
-		__seed = _seed;
-		seed_restart();
-	}
-	
+	/**
+	* Saves the current seed and iteration.
+	*/	
 	static seed_save = function() {
-		__seed_saved = __seed;
-		__iteration_saved = __iteration;
+		__data.seed_saved = __data.seed;
+		__data.iteration_saved = __data.iteration;
 	}
 	
+	/**
+	* Loads the saved seed and iteration.
+	*/	
 	static seed_load = function() {
-		__seed = __seed_saved;
-		__iteration = __iteration_saved;
+		__data.seed = __data.seed_saved;
+		__data.iteration = __data.iteration_saved;
 	}
 	
+	/**
+	* Saves the previous seed and iteration.
+	*/	
+	static seed_save_previous = function() {
+		__data.seed_saved_previous = __data.seed_previous;
+		__data.iteration_saved_previous = __data.iteration_previous;
+	}
+	
+	/**
+	* Loads the previously saved seed and iteration.
+	*/	
+	static seed_load_previous = function() {
+		__data.seed = __data.seed_saved_previous;
+		__data.iteration = __data.iteration_saved_previous;
+	}
+	
+	/**
+	* Sets the current iteration to base.
+	*/	
 	static seed_restart = function() {
-		__iteration = -4294967296;
+		__data.iteration = __iteration_base;
 	}
 	
 	//Custom methods
+	
+	/**
+	* Returns a number between 0 and set value.
+	* @param {real} _value Value.
+	*/
 	static get_random = function(_value) {
 		var _frac = frac(__generate());
 		return (_value * _frac);
 	}
 	
+	/**
+	* Returns a number between set value 1 and set value 2.
+	* @param {real} _value1 First value.
+	* @param {real} _value2 Second value.
+	*/	
 	static get_random_range = function(_value1, _value2) {
 		var _frac = frac(__generate());
 		return clamp(_value2 * _frac, _value1, _value2);
 	}
 	
+	/**
+	* Returns a whole number between 0 and set value.
+	* @param {real} _value Value.
+	*/
 	static get_irandom = function(_value) {
 		var _frac = frac(__generate());
 		return round(_value * _frac);
 	}
 	
+	/**
+	* Returns a whole number between set value 1 and set value 2.
+	* @param {real} _value1 First value.
+	* @param {real} _value2 Second value.
+	*/	
 	static get_irandom_range = function(_value1, _value2) {
 		var _frac = frac(__generate());
 		return clamp(round(_value * _frac), _value1, _value2);
 	}
 	
+	/**
+	* Shuffles the value around in an array.
+	* @param {array} _array Array.
+	*/	
 	static set_array_shuffle = function(_array) {
 		var _array_len = array_length(_array);
 		var _array_clone = variable_clone(_array);
@@ -77,20 +149,14 @@ function GMRandom() {
 		}
 		return _array_new;
 	}
-	
-	
-	static __seed = 0;
-	static __seed_prev = 0;
-	static __seed_saved = 0;
-	
-	static __iteration = -4294967296;
-	static __iteration_prev = -4294967296;
-	static __iteration_saved = -4294967296;
-	
+		
 	/// @ignore
 	static __generate = function() {
-		var _value = __mulberry32(__seed + __iteration);
-		__iteration++;
+		var _value = __mulberry32(__data.seed + __data.iteration);
+		__data.iteration++;
+		if __data.iteration > -__iteration_base {
+			__data.iteration = __iteration_base;	
+		}
 		return _value;
 	}
 	
@@ -123,16 +189,16 @@ function GMRandom() {
 
 GMRandom();
 
-GMRandom.seed_set(80085)
-show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-GMRandom.seed_restart()
-show_debug_message("seed restart")
-show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
-show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
+GMRandom.seed_set(80085.1337)
+//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
+//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
+//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
+//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
+//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
+//GMRandom.seed_restart()
+//show_debug_message("seed restart")
+//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
+//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
+//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
+//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
+//show_debug_message(GMRandom.set_array_shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
