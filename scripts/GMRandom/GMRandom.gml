@@ -38,6 +38,13 @@ function GMRandom() {
 	}
 	
 	/**
+	* Returns a struct with all seeds and iterations.
+	*/	
+	static seed_get_all = function() {
+		return __data;
+	}
+	
+	/**
 	* Sets the current seed and iteration to previous seed and iteration.
 	*/
 	static seed_set_previous = function() {
